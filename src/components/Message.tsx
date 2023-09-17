@@ -22,10 +22,9 @@ function Message({
     <li className="w-full list-none py-1.5">
       <div
         className={cn(
-          "flex w-fit min-w-[30%] max-w-[80%] flex-col space-y-0.5 rounded-xl px-3 py-2",
+          "flex w-fit min-w-[40%] max-w-[80%] flex-col space-y-0.5 rounded-xl px-3 py-1",
           {
-            "float-right rounded-br-none bg-blue-700 text-right text-white":
-              own,
+            "float-right rounded-br-none bg-blue-700 text-white": own,
             "rounded-bl-none bg-slate-200": !own,
             "opacity-50": isDeleted,
           },
