@@ -34,7 +34,6 @@ const textMessages = [
 ];
 
 export const generateMessageResponse = (
-  count: number,
   userId: number,
   userName: string,
 ): Message => {
@@ -44,7 +43,7 @@ export const generateMessageResponse = (
     Date.now() - Math.floor(Math.random() * 10000000000),
   );
   return {
-    id: count,
+    id: parseInt(Math.random().toString().slice(2, 9)),
     authorId: userId,
     author: userName,
     content: randomTextMessage,

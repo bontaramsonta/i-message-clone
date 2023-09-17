@@ -34,19 +34,26 @@ function App() {
     _setUser((user) => ({ ...user, isTyping: typing }));
   };
 
-  const pushMessage = (message: string) => {
-    const date = new Date();
-    const messageObj: MessageType = {
-      id: messages.length + 1,
-      authorId: user.id,
-      author: user.name,
-      content: message,
-      date,
-      isDM: false,
-      isDeleted: false,
-    };
-    _setMessages((messages) => [...messages, messageObj]);
-
+  const pushMessage = React.useCallback((message: string) => {
+    //! -- generate message if empty
+    if (!message.trim()) {
+      console.log(messages.length);
+      const messageObj = generateMessageResponse(user.id, user.name);
+      _setMessages((messages) => [...messages, messageObj]);
+    } else {
+      //! --
+      const date = new Date();
+      const messageObj: MessageType = {
+        id: parseInt(Math.random().toString().slice(2, 9)),
+        authorId: user.id,
+        author: user.name,
+        content: message,
+        date,
+        isDM: false,
+        isDeleted: false,
+      };
+      _setMessages((messages) => [...messages, messageObj]);
+    }
     //! -- add reponse message from other user
     const randomInMs = Math.floor(Math.random() * 8000) + 2000; // between 2s and 10s
     const typingInMs = randomInMs - 2000;
@@ -57,20 +64,16 @@ function App() {
       timeoutOtherUserTyping();
     }, typingInMs);
     setTimeout(() => {
-      const responseObj = generateMessageResponse(
-        messages.length + 2,
-        otherUser.id,
-        otherUser.name,
-      );
+      const responseObj = generateMessageResponse(otherUser.id, otherUser.name);
       console.log("[response]", responseObj);
       _setMessages((messages) => [...messages, responseObj]);
       _setOtherUser((other) => ({ ...other, isTyping: false }));
     }, randomInMs);
-  };
+  }, []);
 
   return (
-    <main className="mx-auto flex h-full max-h-[900px] min-h-[500px] w-full min-w-[300px] max-w-md flex-col items-center justify-end p-2">
-      <ul className="flex w-full flex-1 flex-col items-center justify-end">
+    <main className="m-auto flex h-screen max-h-[900px] min-h-[500px] w-full min-w-[300px] max-w-md flex-col items-center justify-end px-2">
+      <ul className="flex w-full flex-1 flex-col items-center justify-end overflow-scroll">
         {messages.map((message) => (
           <Message
             key={message.id}
